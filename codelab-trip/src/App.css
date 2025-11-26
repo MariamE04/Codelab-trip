@@ -1,0 +1,25 @@
+.app-container {
+  display: flex;
+  gap: 2rem;
+}
+
+.trip-list {
+  flex: 1;
+}
+.trip-card {
+  border: 1px solid #ccc;
+  padding: 0.5rem;
+  margin-bottom: 0.5rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.trip-card:hover {
+  background: #f0f0f0;
+}
+
+.trip-details {
+  flex: 1;
+  border: 1px solid #aaa;
+  padding: 1rem;
+  background: #fafafa;
+}
