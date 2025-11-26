@@ -30,8 +30,12 @@ function App() {
     });
   }
 
-  // display klicked trips
-   
+  // fetch trips detail
+  function fetchTripDetails(id) {
+  fetch(`https://tripapi.cphbusinessapps.dk/api/trips/${id}`)
+    .then(res => res.json())
+    .then(data => setSelectedTrip(data));
+}
 
   return (
     <div className="app-container">
@@ -59,7 +63,7 @@ function App() {
       const duration = Math.ceil((end - start) / (1000 * 60 * 60 * 24)); // dage
 
       return (
-        <div key={trip.id} className="trip-card"onClick={() => setSelectedTrip(trip)}>
+        <div key={trip.id} className="trip-card"onClick={() => fetchTripDetails(trip.id)}>
           <h3>{trip.name}</h3>
           <p>Category: {trip.category}</p>
           <p>Start: {trip.starttime}</p>
@@ -88,10 +92,34 @@ function App() {
       <p>Email: {selectedTrip.guide.email}</p>
       <p>Phone: {selectedTrip.guide.phone}</p>
       <p>Experience: {selectedTrip.guide.yearsOfExperience} years</p>
+
+     <h3>Items</h3>
+{selectedTrip.packingItems && selectedTrip.packingItems.length > 0 && (
+  selectedTrip.packingItems.map((item, itemIdx) => (
+    <div key={item.id || itemIdx} className="packing-item">
+      <p>Name: {item.name}</p>
+      <p>Weight: {item.weightInGrams}</p>
+      <p>Quantity: {item.quantity}</p>
+      <p>Description: {item.description}</p>
+      <p>Category: {item.category}</p>
+
+      {item.buyingOptions && item.buyingOptions.length > 0 && (
+        <>
+          <h4>Buying Options:</h4>
+          {item.buyingOptions.map((option, optionIdx) => (
+            <div key={optionIdx} className="buying-option">
+              <p>Shop: {option.shopName}</p>
+              <p>Price: {option.price}</p>
+            </div>
+          ))}
+        </>
+      )}
+    </div>
+  ))
+)}
     </div>
   )}
 </div>
-
   );
 }
 
