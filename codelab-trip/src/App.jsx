@@ -13,24 +13,21 @@ function App() {
       .then((data) => {
         setTrips(data);
 
-        // Udtræk kategorier fra trips
+        // Udtræk unikke kategorier fra trips
         const uniqueCategories = [...new Set(data.map((trip) => trip.category))];
         setCategories(uniqueCategories);
       })
-      .catch((error) =>
-        console.error("Error fetching trip info:", error)
-      );
+      .catch((error) => console.error("Error fetching trip info:", error));
   }, []);
 
   // FILTER TRIPS
   let filteredTrips = trips;
 
-if (selectedCategory !== "") {
-  filteredTrips = trips.filter((trip) => {
-    return trip.category === selectedCategory;
-  });
-}
-
+  if (selectedCategory !== "") {
+    filteredTrips = trips.filter((trip) => {
+      return trip.category === selectedCategory;
+    });
+  }
 
   return (
     <div>
@@ -50,15 +47,23 @@ if (selectedCategory !== "") {
       </select>
 
       {/* Trip list */}
-      {filteredTrips.map((trip) => (
-        <div key={trip.id} className="trip-card">
-          <h3>{trip.name}</h3>
-          <p>Category: {trip.category}</p>
-          <p>Start: {trip.starttime}</p>
-          <p>End: {trip.endtime}</p>
-          <p>Price: {trip.price}</p>
-        </div>
-      ))}
+      {filteredTrips.map((trip) => {
+        // Beregner duration i dage
+        const start = new Date(trip.starttime);
+        const end = new Date(trip.endtime);
+        const duration = Math.ceil((end - start) / (1000 * 60 * 60 * 24)); // dage
+
+        return (
+          <div key={trip.id} className="trip-card">
+            <h3>{trip.name}</h3>
+            <p>Category: {trip.category}</p>
+            <p>Start: {trip.starttime}</p>
+            <p>End: {trip.endtime}</p>
+            <p>Price: {trip.price}</p>
+            <p>Duration: {duration} days</p>
+          </div>
+        );
+      })}
     </div>
   );
 }
