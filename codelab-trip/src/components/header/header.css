@@ -1,0 +1,70 @@
+/* ----- Top header ----- */
+.top-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #333; /* mørk baggrund */
+  color: white;
+  padding: 10px 20px;
+}
+
+/* Logo eller overskrift */
+.top-header h1 {
+  font-size: 28px;
+  margin: 0;
+}
+
+/* Login / Logout knap */
+.top-header .user-info,
+.top-header a button {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.top-header button {
+  padding: 8px 16px;
+  background-color: #e04747;
+  border: none;
+  border-radius: 8px;
+  color: white;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background 0.3s;
+}
+
+.top-header button:hover {
+  background-color: #cf2020;
+}
+
+/* ----- Navigation ----- */
+.main-nav {
+  background-color: #444;
+}
+
+.main-nav ul {
+  display: flex;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.main-nav li {
+  margin-right: 20px;
+}
+
+.main-nav a {
+  display: block;
+  color: white;
+  padding: 12px 16px;
+  text-decoration: none;
+  transition: background 0.3s;
+}
+
+.main-nav a:hover:not(.active) {
+  background-color: #555;
+}
+
+.main-nav .active {
+  background-color: #e04747;
+}

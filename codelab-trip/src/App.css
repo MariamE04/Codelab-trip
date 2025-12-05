@@ -1,25 +1,58 @@
+/* ----- App container ----- */
 .app-container {
-  display: flex;
-  gap: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
 }
 
+/* ----- Trips list ----- */
 .trip-list {
-  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-top: 20px;
 }
+
+.trip-list select {
+  padding: 6px 10px;
+  margin-bottom: 15px;
+  width: 200px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+/* Trip card */
 .trip-card {
   border: 1px solid #ccc;
-  padding: 0.5rem;
-  margin-bottom: 0.5rem;
+  padding: 1rem;
+  border-radius: 8px;
+  background-color: #fafafa;
   cursor: pointer;
-  transition: background 0.2s;
-}
-.trip-card:hover {
-  background: #f0f0f0;
+  transition: background 0.2s, transform 0.2s;
 }
 
+.trip-card:hover {
+  background-color: #f0f0f0;
+  transform: translateY(-2px);
+}
+
+/* ----- Trip Details ----- */
 .trip-details {
-  flex: 1;
   border: 1px solid #aaa;
   padding: 1rem;
-  background: #fafafa;
+  border-radius: 8px;
+  background-color: #fafafa;
+}
+
+.trip-details h2 {
+  margin-top: 0;
+}
+
+.packing-item,
+.guide-card {
+  border: 1px solid #ddd;
+  padding: 0.75rem;
+  margin-bottom: 10px;
+  border-radius: 6px;
+  background-color: #fff;
 }
