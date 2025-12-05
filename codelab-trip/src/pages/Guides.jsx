@@ -1,25 +1,13 @@
 import { useEffect, useState } from "react";
-import facade from "../apiFacade";
 
-function Guides() {
+function Guides(){
   const [guides, setGuides] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
 
-  useEffect(() => {
-    facade.fetchData("guides")
-      .then(data => {
-        setGuides(data);
-        setLoading(false);
-      })
-      .catch(err => {
-        setError("Failed to fetch guides. You need ADMIN access.");
-        setLoading(false);
-      });
+   useEffect(() => {
+    fetch("https://tripapi.cphbusinessapps.dk/api/guides")
+      .then(res => res.json())
+      .then(data => setGuides(data));
   }, []);
-
-  if (loading) return <p>Loading guides...</p>;
-  if (error) return <p>{error}</p>;
 
   return (
     <div>
@@ -34,6 +22,7 @@ function Guides() {
       ))}
     </div>
   );
+
 }
 
 export default Guides;
