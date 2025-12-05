@@ -4,7 +4,7 @@ import App from './App.jsx';
 
 import Trips from "./pages/Trips.jsx";
 import TripDetails from "./pages/TripDetails.jsx";
-import Guides from "./components/Guides.jsx";
+import Guides from "./pages/Guides.jsx";
 import NotFound from "./pages/NotFound.jsx";
 import LogIn from "./pages/LoginF.jsx";    
 import ProtectedRoute from "./ProtectedRoute.jsx";

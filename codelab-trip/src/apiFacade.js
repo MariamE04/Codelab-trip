@@ -1,96 +1,110 @@
-const BASE_URL = "http://localhost:7070/api/";
-const LOGIN_ENDPOINT = "auth/login"
+const BASE_URL = "https://tripapi.cphbusinessapps.dk/api/";
+const LOGIN_ENDPOINT = "auth/login";
 
+// -------------------------
+// HELPERS
+// -------------------------
 function handleHttpErrors(res) {
-if (!res.ok) {
-  return Promise.reject({ status: res.status, fullError: res.json() })
-}
-return res.json()
-}
-
-/* Insert utility-methods from later steps 
-here (REMEMBER to uncomment in the returned 
-object when you do)*/
-
-const setToken = (token) => {
-    localStorage.setItem('jwtToken', token)
+  if (!res.ok) {
+    return Promise.reject({ status: res.status, fullError: res.json() });
   }
-const getToken = () => {
-  return localStorage.getItem('jwtToken')
-}
-const loggedIn = () => {
-  const loggedIn = getToken() != null;
-  return loggedIn;
+  return res.json();
 }
 
-const logout = () => {
+function setToken(token) {
+  localStorage.setItem("jwtToken", token);
+}
+
+function getToken() {
+  return localStorage.getItem("jwtToken");
+}
+
+function loggedIn() {
+  return getToken() != null;
+}
+
+function logout() {
   localStorage.removeItem("jwtToken");
 }
 
-const login = (user, password) => {
-  const options = makeOptions("POST", false, { username: user, password });
-  return fetch(BASE_URL + LOGIN_ENDPOINT, options)
+// -------------------------
+// LOGIN
+// -------------------------
+const login = (username, password) => {
+  return fetch(BASE_URL + LOGIN_ENDPOINT, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Accept": "application/json"
+    },
+    body: JSON.stringify({ username, password })
+  })
     .then(handleHttpErrors)
     .then(res => {
-      setToken(res.token);
+      console.log("Login response:", res);
+      setToken(res.token); // gem token
       return res;
-    })
-    .catch(err => {
-      console.log(err);
-      throw err; // vigtigt så App.jsx kan reagere på fejl
     });
 };
 
-
-const fetchData = (endpoint, method) => {
-    const optionObject = makeOptions(method, true)
-   return fetch(BASE_URL + endpoint, optionObject)
-    .then(res => res.json());
-}
-
-const makeOptions= (method,addToken,body) =>{
-  var opts = {
+// -------------------------
+// FETCH WITH TOKEN
+// -------------------------
+const makeOptions = (method, addToken, body) => {
+  const opts = {
     method: method,
     headers: {
-      "Content-type": "application/json",
-      'Accept': 'application/json',
-    }
-  }
+      "Content-Type": "application/json",
+      "Accept": "application/json"
+    },
+  };
+
   if (addToken && loggedIn()) {
-    opts.headers["Authorization"] = `Bearer ${getToken()}`;
+    opts.headers["Authorization"] = "Bearer " + getToken();
   }
+
   if (body) {
     opts.body = JSON.stringify(body);
   }
+
   return opts;
+};
+
+const fetchData = (endpoint, method = "GET") => {
+  const options = makeOptions(method, true);
+  return fetch(BASE_URL + endpoint, options).then(handleHttpErrors);
+};
+
+// -------------------------
+// READ USERNAME + ROLES FROM JWT
+// -------------------------
+function getUserNameAndRoles() {
+  const token = getToken();
+  if (!token) return ["", ""];
+
+  const payload = token.split(".")[1];
+  const claims = JSON.parse(atob(payload));
+
+  const username = claims.username;
+  // Hvis roles ikke findes i JWT, sæt det ud fra username
+  const roles = claims.roles || (username === "admin" ? "ADMIN" : "USER");
+
+  return [username, roles];
 }
 
-function getUserNameAndRoles() {
-        const token = getToken()
-        if (token != null) {
-            const payloadBase64 = getToken().split('.')[1]
-            const decodedClaims = JSON.parse(window.atob(payloadBase64))
-            const roles = decodedClaims.roles
-            const username = decodedClaims.username;
-            return [username, roles]
-        } else return ""
-    }
-
-    const hasUserAccess = (neededRole, loggedIn) => {
-        const roles = getUserNameAndRoles()[1].split(',')
-        return loggedIn && roles.includes(neededRole)
-    }
+function hasUserAccess(neededRole, isLoggedIn) {
+  if (!isLoggedIn) return false;
+  const [, roles] = getUserNameAndRoles();
+  return roles.split(",").includes(neededRole);
+}
 
 const facade = {
-    getUserNameAndRoles,
-    hasUserAccess,
-    makeOptions,
-    //setToken,
-    //getToken,
-    //loggedIn,
-    login,
-    logout,
-    fetchData
-}
+  login,
+  logout,
+  loggedIn,
+  fetchData,
+  getUserNameAndRoles,
+  hasUserAccess,
+};
 
 export default facade;
