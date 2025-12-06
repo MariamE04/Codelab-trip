@@ -25,7 +25,7 @@ function Header({ loggedIn, username, roles, handleLogout }) {
             <NavLink to="/trips">Trips</NavLink>
           </li>
 
-          {roles?.includes("admin") && (
+          {roles?.toLowerCase().includes("admin")  && (
             <li>
               <NavLink to="/guides">Guides</NavLink>
             </li>

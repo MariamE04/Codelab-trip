@@ -20,12 +20,12 @@ ReactDOM.createRoot(root).render(
       <Route path="trips" element={<Trips />} />
 
       {/* USER-only route */}
-      <Route element={<ProtectedRoute role="USER" />}>
+      <Route element={<ProtectedRoute role="user" />}>
         <Route path="trip/:id" element={<TripDetails />} />
       </Route>
 
       {/* ADMIN-only route */}
-      <Route element={<ProtectedRoute role="ADMIN" />}>
+      <Route element={<ProtectedRoute role="admin" />}>
         <Route path="guides" element={<Guides />} />
       </Route>
 

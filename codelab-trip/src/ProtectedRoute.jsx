@@ -3,7 +3,9 @@ import facade from "./apiFacade";
 
 function ProtectedRoute({ role }) {
   const isLoggedIn = facade.loggedIn(); // tjek login
-  const hasRole = role ? facade.hasUserAccess(role, isLoggedIn) : true;
+  const [, roles] = facade.getUserNameAndRoles();
+const hasRole = roles.toLowerCase().includes(role.toLowerCase());
+
 
   if (!isLoggedIn) {
     return <Navigate to="/login" replace />; // redirect til login

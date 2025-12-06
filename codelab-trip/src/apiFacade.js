@@ -86,11 +86,13 @@ function getUserNameAndRoles() {
   const claims = JSON.parse(atob(payload));
 
   const username = claims.username;
-  // Hvis roles ikke findes i JWT, sæt det ud fra username
-  const roles = claims.roles || (username === "admin" ? "ADMIN" : "USER");
+
+  // Backend bruger lowercase: "admin" eller "user"
+  const roles = claims.roles || username;  // hvis admin → "admin", hvis user → "user"
 
   return [username, roles];
 }
+
 
 function hasUserAccess(neededRole, isLoggedIn) {
   if (!isLoggedIn) return false;
