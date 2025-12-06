@@ -13,3 +13,7 @@ const NotFound = () => {
 };
 
 export default NotFound;
+
+
+// Hvis brugeren går til en sti, der ikke eksisterer i app’en, vises NotFound-siden,
+//  og filepath viser den udefinerede sti.

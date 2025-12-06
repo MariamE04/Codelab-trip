@@ -25,7 +25,8 @@ function Header({ loggedIn, username, roles, handleLogout }) {
             <NavLink to="/trips">Trips</NavLink>
           </li>
 
-          {roles?.toLowerCase().includes("admin")  && (
+          {/*Hvis roles faktisk findes (ikke undefined eller null), så fortsæt med næste del. Hvis ikke, spring hele udtrykket over." - Det forhindrer, at app’en crasher, hvis roles ikke er sat. */}
+          {roles?.toLowerCase().includes("admin")  && (       
             <li>
               <NavLink to="/guides">Guides</NavLink>
             </li>
