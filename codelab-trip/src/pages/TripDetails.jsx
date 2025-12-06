@@ -1,24 +1,28 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import facade from "../apiFacade";
 
-
-function TripDetails(){
+function TripDetails() {
   const { id } = useParams();
-  const [selectedTrip, setSelectedTrip] = useState();
+  const [selectedTrip, setSelectedTrip] = useState(null);
+  const [error, setError] = useState(null);
 
-
- useEffect(() => {
-    fetch(`https://tripapi.cphbusinessapps.dk/api/trips/${id}`)
-      .then(res => res.json())
-      .then(data => setSelectedTrip(data));
+  useEffect(() => {
+    facade.fetchData("trips/" + id)
+      .then(data => {
+        console.log("Trip data:", data);
+        setSelectedTrip(data);
+      })
+      .catch(err => {
+        console.error("Error fetching trip:", err);
+        setError("Access denied or error loading trip");
+      });
   }, [id]);
 
+  if (error) return <p>{error}</p>;
+  if (!selectedTrip) return <p>Loading trip details...</p>;
 
-   if (!selectedTrip) {
-    return <p>Loading trip details...</p>;
-  }
-
-   return (
+  return (
     <div className="trip-details">
       <h2>{selectedTrip.name}</h2>
       <p>Category: {selectedTrip.category}</p>
@@ -59,7 +63,6 @@ function TripDetails(){
       ))}
     </div>
   );
-
 }
 
 export default TripDetails;
